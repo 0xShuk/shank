@@ -59,7 +59,7 @@ impl TryFrom<InstructionVariant> for IdlInstruction {
             discriminant,
         } = variant;
 
-        let name = ident.to_string();
+        let name = ident.to_string().to_mixed_case();
         let parsed_idl_fields: Result<Vec<IdlField>, Error> = match field_tys {
             InstructionVariantFields::Named(args) => {
                 let mut parsed: Vec<IdlField> = vec![];
