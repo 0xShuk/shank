@@ -1,6 +1,7 @@
 use std::convert::{TryFrom, TryInto};
 
 use anyhow::{Error, Result};
+use heck::MixedCase;
 use serde::{Deserialize, Serialize};
 use shank_macro_impl::{
     custom_type::{CustomEnum, CustomStruct},
@@ -62,7 +63,7 @@ impl TryFrom<ParsedStruct> for IdlTypeDefinition {
     type Error = Error;
 
     fn try_from(strct: ParsedStruct) -> Result<Self> {
-        let name = strct.ident.to_string();
+        let name = strct.ident.to_string().to_mixed_case();
         let ty: IdlTypeDefinitionTy = strct.try_into()?;
         Ok(Self { ty, name })
     }

@@ -7,7 +7,7 @@ use std::{
 use anyhow::{anyhow, format_err, Result};
 use clap::Parser;
 use log::{debug, info};
-use shank_idl::{extract_idl, manifest::Manifest, ParseIdlOpts};
+use shank_gov_idl::{extract_idl, manifest::Manifest, ParseIdlOpts};
 
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
@@ -105,6 +105,29 @@ pub fn idl(
     let idl = extract_idl(lib_full_path, opts)?
         .ok_or(anyhow!("No IDL could be extracted"))?;
     let idl_json = idl.try_into_json()?;
+    let y = idl_json.split("],\n  \"errors\": [").collect::<Vec<&str>>();
+    let mut final_json = y[0].to_string();
+
+    final_json.push_str("
+    ,
+    {
+        \"name\": \"UnixTimestamp\",
+        \"type\": {
+            \"kind\": \"alias\",
+            \"value\": \"i64\"
+        }
+    },
+    {
+        \"name\": \"Slot\",
+        \"type\": {
+            \"kind\": \"alias\",
+            \"value\": \"u64\"
+        }
+    }
+    ],
+    \"errors\": [");
+
+    final_json.push_str(y[1]);
 
     // Write to JSON file
     let name = manifest.lib_name()?;
@@ -112,7 +135,7 @@ pub fn idl(
     let mut idl_json_file = File::create(&idl_json_path)?;
     info!("Writing IDL to {}", &idl_json_path.display());
 
-    idl_json_file.write_all(idl_json.as_bytes())?;
+    idl_json_file.write_all(final_json.as_bytes())?;
 
     Ok(())
 }

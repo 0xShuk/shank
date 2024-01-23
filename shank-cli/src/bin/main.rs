@@ -1,12 +1,12 @@
 use anyhow::Result;
 use clap::StructOpt;
-use shank_cli::Opts;
+use shank_gov_cli::Opts;
 
 use fern::colors::{Color, ColoredLevelConfig};
 
 fn main() -> Result<()> {
     setup_logging();
-    shank_cli::entry(Opts::parse())
+    shank_gov_cli::entry(Opts::parse())
 }
 
 fn setup_logging() {

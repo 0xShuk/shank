@@ -1,6 +1,6 @@
 use std::path::{Path, PathBuf};
 
-use shank_idl::{idl::Idl, parse_file, ParseIdlConfig};
+use shank_gov_idl::{idl::Idl, parse_file, ParseIdlConfig};
 
 fn fixtures_dir() -> PathBuf {
     let root_dir = Path::new(env!("CARGO_MANIFEST_DIR"));

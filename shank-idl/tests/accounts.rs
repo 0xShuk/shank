@@ -4,7 +4,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use shank_idl::{
+use shank_gov_idl::{
     extract_idl, idl::Idl, parse_file, ParseIdlConfig, ParseIdlOpts,
 };
 
